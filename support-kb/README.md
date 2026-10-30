@@ -34,3 +34,11 @@ Support desk. Decision records: whoever signed them.
 ---
 
 Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
+
+## Build
+
+```
+npm install
+npx vite build      # static pages in build/
+npx vite preview    # look at them on http://localhost:4173/kb
+```
