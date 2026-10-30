@@ -1,0 +1,59 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: karol1on
+status: open
+reviewed: 2026-10-30
+signature: v1.eyJzdWIiOiI1MDE4IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMzNTUyMzQsImV4cCI6MTc5MzQ0MTYzNH0.x0M3_dG1IuHEY0z2OyHoWp47hpKPnCc1Z_W2dDwMCCU
+---
+
+<script>
+  import SplitTable from '#lib/kb/SplitTable.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) says one bug: the parser reads dates month first. The reports it
+merged hold three problems, with three different fixes. Fixing the parser closes only the
+first one.
+
+<Callout kind="warn">
+#4471 is not "known, one fix queued". Two of its problems have no fix and, until now, no ticket.
+</Callout>
+
+## What #4471 holds
+
+<SplitTable ticket={4471} repo="karol1on/mega-s01e03-what-it-shows" issues={{ parser: 1, hint: 2, shift: 3 }} />
+
+Counts are unique report ids: the ticket export repeats some rows across its pages.
+
+## The three problems
+
+**`parser`: the shared parser reads every date month first.** Every tenant on file writes the
+day first. A booking for 7 April goes out for 4 July. Reports arrive by app and email, and by
+booking-v2's form, whose hint says `DD/MM/YYYY`.
+
+**`hint`: booking-v3's form tells people to type the month first.** Its hint says
+`MM/DD/YYYY`, then the form reads the date the tenant's way, day first. Only tenants on
+booking-v3, only through the form. The parser fix does not touch it: the form needs the right
+hint for the tenant's locale.
+
+**`shift`: the day moves by one, not month and day.** "Lisbon got Tuesday, Toronto got Monday",
+"every booking in June is one day off", "the invite arrived before I made the booking". That is
+a time zone or daylight-saving bug, not date order. The desk had already read these reports
+as a one-day move (desk notes); the old table counted them under `parser` by tenant.
+
+## How it got merged
+
+- [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line. "Wrong day on
+  the invite" fits all three problems, so all three landed in one ticket.
+- Intake tags by the reporter's browser, not by the tenant and form. The tags in the table
+  disagree with the cause in both directions; go by tenant and channel.
+
+## For the desk
+
+- Route new date reports by tenant, form and channel (`#lib/kb/causes`), not by subject or tag.
+- A report that says "one day off" is `shift`, whatever its subject. Add its id to
+  `oneDayMove` in desk notes.
+
+<RenderStamp {signature} />
