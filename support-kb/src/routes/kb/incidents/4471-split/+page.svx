@@ -18,7 +18,8 @@ merged hold three problems, with three different fixes. Fixing the parser closes
 first one.
 
 <Callout kind="warn">
-#4471 is not "known, one fix queued". Two of its problems have no fix and, until now, no ticket.
+Engineering closed #4471 on 5 October: `parser` fixed (fix(dates): parse dd/mm for eu locales),
+`hint` won't fix (booking-v3 form retired). `shift` was in neither: it is still open.
 </Callout>
 
 ## What #4471 holds
