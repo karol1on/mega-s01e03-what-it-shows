@@ -41,7 +41,8 @@ hint for the tenant's locale.
 **`shift`: the day moves by one, not month and day.** "Lisbon got Tuesday, Toronto got Monday",
 "every booking in June is one day off", "the invite arrived before I made the booking". That is
 a time zone or daylight-saving bug, not date order. The desk had already read these reports
-as a one-day move (desk notes); the old table counted them under `parser` by tenant.
+as a one-day move (desk notes). The table counts them where they are filed, under `parser`,
+and again on their own row.
 
 ## How it got merged
 

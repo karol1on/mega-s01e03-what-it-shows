@@ -5,7 +5,7 @@ The support desk's ticket #4471 holds three problems, not one:
 
 | issue | problem | reports |
 |---|---|---|
-| [#1](../../issues/1) | shared parser reads day-first dates month first | 374 |
+| [#1](../../issues/1) | shared parser reads day-first dates month first | 379 (5 of them also in #3) |
 | [#2](../../issues/2) | booking-v3 form hint says MM/DD, form reads DD/MM | 33 |
 | [#3](../../issues/3) | bookings move by one day across time zones | 5 |
 

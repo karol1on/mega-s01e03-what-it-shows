@@ -17,10 +17,8 @@ export type Report = {
 
 export type Tenant = { handle: string; name: string; locale: string; form: 'booking-v2' | 'booking-v3' };
 
-// `shift`: the day moves by one (time zones), not month and day. Only a reader can tell, from the
-// body; the desk lists those reports in desk-notes.json (`oneDayMove`).
-export type Cause = 'parser' | 'hint' | 'shift';
-export const CAUSES: readonly Cause[] = ['parser', 'hint', 'shift'];
+export type Cause = 'parser' | 'hint';
+export const CAUSES: readonly Cause[] = ['parser', 'hint'];
 
 // What each booking form prints under its date field.
 const DATE_HINT: Record<Tenant['form'], string> = {
@@ -65,14 +63,10 @@ export type CauseGroup = {
   mergedInto: number[];
 };
 
-export function groupByCause(
-  reports: Report[],
-  tenantOf: (r: Report) => Tenant | undefined,
-  shiftIds: readonly string[] = [],
-): CauseGroup[] {
+export function groupByCause(reports: Report[], tenantOf: (r: Report) => Tenant | undefined): CauseGroup[] {
   const byCause = new Map<CauseGroup['cause'], Report[]>();
   for (const r of reports) {
-    const cause = shiftIds.includes(r.id) ? 'shift' : (causeOf(r, tenantOf(r)) ?? 'unplaced');
+    const cause = causeOf(r, tenantOf(r)) ?? 'unplaced';
     byCause.set(cause, [...(byCause.get(cause) ?? []), r]);
   }
   return [...byCause.entries()]
